@@ -1,6 +1,6 @@
 {
   "name": "stargate-mcp",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Personal MCP server toolkit - Asana, GitHub, and more integrations for AI agents",
   "author": "eggfriedrice24",
   "license": "MIT",

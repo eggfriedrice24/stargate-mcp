@@ -255,6 +255,30 @@ export function registerAsanaTools(server: McpServer) {
     }
   );
 
+  // List subtasks of a task
+  server.tool(
+    "asana_list_subtasks",
+    "List all subtasks (children) of an Asana task",
+    {
+      task_gid: z.string().describe("Parent task GID"),
+    },
+    async ({ task_gid }) => {
+      try {
+        const subtasks = await asanaRequest(
+          `/tasks/${task_gid}/subtasks?opt_fields=name,gid,completed,assignee.name,due_on,custom_fields`
+        );
+        return {
+          content: [{ type: "text" as const, text: JSON.stringify(subtasks, null, 2) }],
+        };
+      } catch (error) {
+        return {
+          content: [{ type: "text" as const, text: `Error: ${error}` }],
+          isError: true,
+        };
+      }
+    }
+  );
+
   // Add comment to task
   server.tool(
     "asana_add_comment",

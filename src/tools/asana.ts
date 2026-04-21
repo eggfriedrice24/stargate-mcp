@@ -250,13 +250,14 @@ export function registerAsanaTools(server: McpServer) {
     {
       task_gid: z.string().describe("Task GID"),
       custom_fields: z
-        .record(z.union([z.string(), z.number()]))
-        .describe("Object mapping custom field GID to value, e.g. {'123456': 5, '789012': 3}"),
+        .string()
+        .describe('JSON string mapping custom field GID to value, e.g. \'{"123456": 5, "789012": 3}\''),
     },
     async ({ task_gid, custom_fields }) => {
       try {
+        const parsed = JSON.parse(custom_fields);
         const task = await asanaRequest(`/tasks/${task_gid}`, "PUT", {
-          custom_fields,
+          custom_fields: parsed,
         });
         return {
           content: [
